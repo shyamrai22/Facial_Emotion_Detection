@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Emotion Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Facial Emotion Recognition</h1>
+    </header>
+    <div class="container">
+        <div class="video-container">
+            <img id="video-stream" src="" alt="Emotion Detection Video">
+            <img id="placeholder-image" src="{{ url_for('static', filename='image.avif') }}" alt="">
+        </div>
+        <div class="controls">
+            <button class="btn" onclick="startWebcam()">Start Webcam</button>
+            <button class="btn" onclick="stopWebcam()">Stop Webcam</button>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Facial Emotion Recognition. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let videoStreamElement = document.getElementById('video-stream');
+        let placeholderImageElement = document.getElementById('placeholder-image');
+
+        // Show placeholder image on page load
+        window.onload = function() {
+            videoStreamElement.style.display = 'none';
+            placeholderImageElement.style.display = 'block';
+        };
+
+        function startWebcam() {
+            // Start the webcam via the Flask backend
+            fetch('/start_webcam', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    // Set the video feed URL to start streaming from Flask
+                    videoStreamElement.src = '/video_feed';
+                    videoStreamElement.style.display = 'block'; // Show video
+                    placeholderImageElement.style.display = 'none'; // Hide placeholder
+                });
+        }
+
+        function stopWebcam() {
+            // Stop the webcam via the Flask backend
+            fetch('/stop_webcam', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    // Clear the video feed and show the placeholder image
+                    videoStreamElement.src = '';
+                    videoStreamElement.style.display = 'none'; // Hide video
+                    placeholderImageElement.style.display = 'block'; // Show placeholder
+                });
+        }
+    </script>
+</body>
+</html>
