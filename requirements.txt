@@ -1,4 +1,7 @@
-Flask
+flask
 opencv-python
+opencv-python-headless
 transformers
 Pillow
+torch
+numpy
